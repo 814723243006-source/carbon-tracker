@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Tracker - Monitor Your Carbon Footprint</title>
+    <meta name="description" content="Track, monitor, and reduce your carbon footprint across transportation, energy, food, and shopping activities.">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Carbon Tracker</h1>
+            <p>Track, Monitor, and Reduce Your Carbon Footprint</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-link active" data-view="dashboard">Dashboard</a>
+            <a href="#" class="nav-link" data-view="log">Log Emissions</a>
+            <a href="#" class="nav-link" data-view="history">History</a>
+            <a href="#" class="nav-link" data-view="goals">Goals</a>
+            <a href="#" class="nav-link" data-view="tips">Tips</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view">
+                <h2 style="margin-bottom: 1.5rem; color: #2E7D32;">Your Carbon Footprint Dashboard</h2>
+                
+                <!-- Summary Cards -->
+                <div class="summary-cards">
+                    <div class="card">
+                        <h3>Total Emissions</h3>
+                        <div class="value" id="totalEmissions">0 kg CO2e</div>
+                    </div>
+                    <div class="card">
+                        <h3>This Week</h3>
+                        <div class="value" id="weekEmissions">0 kg CO2e</div>
+                    </div>
+                    <div class="card">
+                        <h3>Total Entries</h3>
+                        <div class="value" id="totalEntries">0</div>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="category-breakdown">
+                    <h2>Emissions by Category</h2>
+                    <div id="categoryBreakdown"></div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h2>Emissions by Category</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="period-select">
+                            <label for="periodSelect">View by: </label>
+                            <select id="periodSelect">
+                                <option value="day">Daily</option>
+                                <option value="week" selected>Weekly</option>
+                                <option value="month">Monthly</option>
+                                <option value="year">Yearly</option>
+                            </select>
+                        </div>
+                        <h2>Emission Trends</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Emissions View -->
+            <div id="logView" class="view">
+                <h2 style="margin-bottom: 1.5rem; color: #2E7D32;">Log Your Emissions</h2>
+                
+                <div class="form-container">
+                    <form id="emissionForm">
+                        <div class="form-group">
+                            <label for="emissionCategory">Category</label>
+                            <select id="emissionCategory" required>
+                                <option value="transportation">Transportation</option>
+                                <option value="energy">Home Energy</option>
+                                <option value="food">Food & Diet</option>
+                                <option value="shopping">Shopping & Goods</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emissionType">Activity Type</label>
+                            <select id="emissionType" required>
+                                <!-- Options populated dynamically -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emissionAmount">
+                                Amount <span id="unitLabel" class="unit-label"></span>
+                            </label>
+                            <input 
+                                type="number" 
+                                id="emissionAmount" 
+                                step="0.01" 
+                                min="0" 
+                                required 
+                                placeholder="Enter amount">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emissionDate">Date</label>
+                            <input 
+                                type="date" 
+                                id="emissionDate" 
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emissionDescription">Description (optional)</label>
+                            <textarea 
+                                id="emissionDescription" 
+                                placeholder="Add any notes about this activity..."></textarea>
+                        </div>
+
+                        <button type="submit">Log Emission</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- History View -->
+            <div id="historyView" class="view">
+                <h2 style="margin-bottom: 1.5rem; color: #2E7D32;">Emission History</h2>
+                <div id="historyList" class="history-list"></div>
+            </div>
+
+            <!-- Goals View -->
+            <div id="goalsView" class="view">
+                <h2 style="margin-bottom: 1.5rem; color: #2E7D32;">Carbon Reduction Goals</h2>
+                
+                <div class="goals-section">
+                    <h3 style="margin-bottom: 1rem;">Active Goals</h3>
+                    <div id="goalsList" class="goals-list"></div>
+                </div>
+
+                <div class="goal-suggestions">
+                    <h3>Suggested Goals</h3>
+                    <div id="goalSuggestions"></div>
+                </div>
+
+                <div class="form-container" style="margin-top: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Create Custom Goal</h3>
+                    <form id="goalForm">
+                        <div class="form-group">
+                            <label for="goalTitle">Goal Title</label>
+                            <input 
+                                type="text" 
+                                id="goalTitle" 
+                                required 
+                                placeholder="e.g., Reduce monthly emissions">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goalTarget">Target Emissions (kg CO2e)</label>
+                            <input 
+                                type="number" 
+                                id="goalTarget" 
+                                step="0.1" 
+                                min="0" 
+                                required 
+                                placeholder="e.g., 100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goalPeriod">Time Period</label>
+                            <select id="goalPeriod" required>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly" selected>Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+
+                        <button type="submit">Create Goal</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tips View -->
+            <div id="tipsView" class="view">
+                <h2 style="margin-bottom: 1.5rem; color: #2E7D32;">Tips & Recommendations</h2>
+                <p style="margin-bottom: 2rem; color: #757575;">
+                    Personalized suggestions to help you reduce your carbon footprint
+                </p>
+                <div id="tipsList" class="tips-list"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Carbon Tracker. Help save our planet, one step at a time. 🌍</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                <button id="clearDataBtn" style="background: none; border: none; color: #81C784; cursor: pointer; text-decoration: underline; font-size: 0.9rem;">
+                    Clear All Data
+                </button>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/emissions.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/goals.js"></script>
+    <script src="js/tips.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        // Set today's date as default for emission date input
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('emissionDate');
+            if (dateInput) {
+                dateInput.valueAsDate = new Date();
+            }
+        });
+    </script>
+</body>
+</html>
