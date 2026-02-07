@@ -9,8 +9,40 @@ let dashboardCharts = {};
  * Initialize dashboard charts
  */
 function initializeDashboardCharts() {
+    // Check if Chart.js is available
+    if (typeof Chart === 'undefined') {
+        console.warn('Chart.js not loaded. Charts will not be displayed.');
+        displayChartPlaceholder('categoryChart', 'Category chart requires Chart.js library');
+        displayChartPlaceholder('trendChart', 'Trend chart requires Chart.js library');
+        return;
+    }
+    
     createCategoryPieChart();
     createTrendLineChart();
+}
+
+/**
+ * Display placeholder when Chart.js is not available
+ */
+function displayChartPlaceholder(canvasId, message) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    const width = canvas.offsetWidth || 400;
+    const height = canvas.offsetHeight || 300;
+    
+    canvas.width = width;
+    canvas.height = height;
+    
+    ctx.fillStyle = '#f5f5f5';
+    ctx.fillRect(0, 0, width, height);
+    
+    ctx.fillStyle = '#757575';
+    ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(message, width / 2, height / 2);
 }
 
 /**
@@ -18,7 +50,7 @@ function initializeDashboardCharts() {
  */
 function createCategoryPieChart() {
     const ctx = document.getElementById('categoryChart');
-    if (!ctx) return;
+    if (!ctx || typeof Chart === 'undefined') return;
     
     const emissions = getEmissions();
     const byCategory = calculateEmissionsByCategory(emissions);
@@ -88,7 +120,7 @@ function createCategoryPieChart() {
  */
 function createTrendLineChart() {
     const ctx = document.getElementById('trendChart');
-    if (!ctx) return;
+    if (!ctx || typeof Chart === 'undefined') return;
     
     const emissions = getEmissions();
     const period = document.getElementById('periodSelect')?.value || 'week';
